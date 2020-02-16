@@ -9,5 +9,5 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(router);
 
 app.listen(port, () => {
-  console.log(`server start at http://localhost:${port}`);
+  console.log(`server start at http://localhost:${port}/login`);
 });
