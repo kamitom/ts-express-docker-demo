@@ -5,11 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const faker_1 = __importDefault(require("faker"));
-const router = express_1.Router();
-exports.router = router;
+const routerForTest = express_1.Router();
+exports.routerForTest = routerForTest;
 const fName = faker_1.default.name.findName();
 const fAddressZipCode = faker_1.default.address.zipCode();
-router.get('/login', (req, res) => {
+routerForTest.get('/login', (req, res) => {
     res.send(`
     <form method="POST">
       <div>
@@ -24,19 +24,35 @@ router.get('/login', (req, res) => {
     </form>
   `);
 });
-router.post('/login', (req, res) => {
-    // if (req) res.send('success!');
+routerForTest.post('/login', (req, res) => {
     const { email, password } = req.body;
-    if (email == 'tom@test.me' && password == 1234) {
+    if (email && password && email == 'tom@test.me' && password == 1234) {
+        req.session = { loggedIn2: true };
+        res.redirect('/');
+    }
+    else {
+        res.status(400).send('Invalid email or password');
+    }
+});
+routerForTest.get('/', (req, res) => {
+    if (req.session && req.session.loggedIn2) {
         res.send(`
-    <h1>email: ${email}, pass: ${password}</h1>
-    <hr>
-    <p>${fName}</p>
-    <hr>
-    <p>zipCode: ${fAddressZipCode}</p>
+      <div>
+        <div>You are logged in</div>
+        <a href='/logout'>logout</a>
+      </div>
     `);
     }
     else {
-        res.status(404).send('Sorry, cant find that');
+        res.send(`
+      <div>
+        <div>You are not logged in</div>
+        <a href='/login'>login</a>
+      </div>
+    `);
     }
+});
+routerForTest.get('/logout', (req, res) => {
+    req.session = undefined;
+    res.redirect('/');
 });

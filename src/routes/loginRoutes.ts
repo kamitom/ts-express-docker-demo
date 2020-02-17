@@ -1,12 +1,16 @@
 import { Router, Request, Response } from 'express';
 import faker from 'faker';
 
-const router = Router();
+const routerForTest = Router();
 
 const fName = faker.name.findName();
 const fAddressZipCode = faker.address.zipCode();
 
-router.get('/login', (req: Request, res: Response) => {
+interface RequestWithBody extends Request {
+  body: { [key: string]: string | undefined | number };
+}
+
+routerForTest.get('/login', (req: Request, res: Response) => {
   res.send(`
     <form method="POST">
       <div>
@@ -22,21 +26,38 @@ router.get('/login', (req: Request, res: Response) => {
   `);
 });
 
-router.post('/login', (req: Request, res: Response) => {
-  // if (req) res.send('success!');
-
+routerForTest.post('/login', (req: RequestWithBody, res: Response) => {
   const { email, password } = req.body;
-  if (email == 'tom@test.me' && password == 1234) {
-    res.send(`
-    <h1>email: ${email}, pass: ${password}</h1>
-    <hr>
-    <p>${fName}</p>
-    <hr>
-    <p>zipCode: ${fAddressZipCode}</p>
-    `);
+
+  if (email && password && email == 'tom@test.me' && password == 1234) {
+    req.session = { loggedIn2: true };
+    res.redirect('/');
   } else {
-    res.status(404).send('Sorry, cant find that');
+    res.status(400).send('Invalid email or password');
   }
 });
 
-export { router };
+routerForTest.get('/', (req: Request, res: Response) => {
+  if (req.session && req.session.loggedIn2) {
+    res.send(`
+      <div>
+        <div>You are logged in</div>
+        <a href='/logout'>logout</a>
+      </div>
+    `);
+  } else {
+    res.send(`
+      <div>
+        <div>You are not logged in</div>
+        <a href='/login'>login</a>
+      </div>
+    `);
+  }
+});
+
+routerForTest.get('/logout', (req: Request, res: Response) => {
+  req.session = undefined;
+  res.redirect('/');
+});
+
+export { routerForTest };
