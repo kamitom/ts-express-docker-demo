@@ -41,14 +41,14 @@ routerForTest.get('/', (req: Request, res: Response) => {
   if (req.session && req.session.loggedIn2) {
     res.send(`
       <div>
-        <div>You are logged in</div>
+        <div>${fName} are logged in</div>
         <a href='/logout'>logout</a>
       </div>
     `);
   } else {
     res.send(`
       <div>
-        <div>You are not logged in</div>
+        <div>${fName} are not logged in</div>
         <a href='/login'>login</a>
       </div>
     `);

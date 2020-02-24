@@ -13,5 +13,5 @@ app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use(cookie_session_1.default({ keys: ['隨便打字即可aasdfasdfasdfasdf'] }));
 app.use(loginRoutes_1.routerForTest);
 app.listen(port, () => {
-    console.log(`server start at http://localhost:${port}/login`);
+    console.log(`server start at http://localhost:${port}`);
 });
