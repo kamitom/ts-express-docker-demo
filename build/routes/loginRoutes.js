@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.routerForTest = void 0;
 const express_1 = require("express");
 const faker_1 = __importDefault(require("faker"));
 const routerForTest = express_1.Router();
@@ -37,18 +38,22 @@ routerForTest.post('/login', (req, res) => {
 routerForTest.get('/', (req, res) => {
     if (req.session && req.session.loggedIn2) {
         res.send(`
+      <hr>
       <div>
         <div>${fName} are logged in</div>
         <a href='/logout'>logout</a>
       </div>
+      <hr>
     `);
     }
     else {
         res.send(`
+      <hr>
       <div>
         <div>${fName} are not logged in</div>
         <a href='/login'>login</a>
       </div>
+      <hr>
     `);
     }
 });

@@ -1,5 +1,7 @@
 "use strict";
 class Vehicle {
+    brandName;
+    madeYear;
     constructor(name, year) {
         this.brandName = name;
         this.madeYear = year;
